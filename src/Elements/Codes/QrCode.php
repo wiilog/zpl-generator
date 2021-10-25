@@ -75,7 +75,7 @@ class QrCode extends Element {
         $this->addPosition($context);
 
         $context->bq("N", 2, $this->size, $this->errorCorrection)
-            ->fd("MM", "A", $this->content)
+            ->fd("MM", "A$this->content")
             ->fs();
 
         if($this->displayContent)  {
