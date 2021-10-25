@@ -21,7 +21,7 @@ class QrCode extends Element {
 
     private ?int $size = null;
 
-    private bool $displayText = true;
+    private bool $displayContent = false;
 
     private ?TextConfig $textConfig = null;
 
@@ -53,8 +53,8 @@ class QrCode extends Element {
         return $this;
     }
 
-    public function setDisplayText(bool $displayText): self {
-        $this->displayText = $displayText;
+    public function setDisplayContent(bool $displayContent): self {
+        $this->displayContent = $displayContent;
         return $this;
     }
 
@@ -63,8 +63,8 @@ class QrCode extends Element {
         return $this;
     }
 
-    public function getWidth(int $dpi): ?float {
-        return 2.5 * 203 / $dpi * $this->size;
+    public function getWidth(Context $context): ?float {
+        return 2.5 * 203 / $context->getDPI() * $this->size;
     }
 
     public function setWidth(float $width): Element {
@@ -78,11 +78,11 @@ class QrCode extends Element {
             ->fd("MM", "A", $this->content)
             ->fs();
 
-        if($this->displayText)  {
+        if($this->displayContent)  {
             //height is same as width since a QR code is a square
-            $height = $this->getWidth($context->getDPI());
+            $height = $this->getWidth($context);
 
-            $context->fo(0, $context->toDots(Context::Y, $this->getAbsoluteY($context->getDPI()) + $height + 5))
+            $context->fo(0, $context->toDots(Context::Y, $this->getAbsoluteY($context) + $height + 5))
                 ->with($this->textConfig ?? $context->getDefaultTextConfig())
                 ->fb($context->toDots(Context::X, $context->getWidth()), 1, 0, $this->alignment, 0)
                 ->fh("_")

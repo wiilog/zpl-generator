@@ -26,8 +26,8 @@ class Text extends Element {
     //no matter the alignment return the left aligned
     //position since text alignment is handled by the field
     //block command
-    public function getAbsoluteX(int $dpi): ?float {
-        return $this->root->getAbsoluteX($dpi) + $this->getX();
+    public function getAbsoluteX(Context $context): ?float {
+        return $this->getX();
     }
 
     public function setText(string $text): self {
@@ -58,7 +58,7 @@ class Text extends Element {
     public function toZPL(Context $context) {
         $this->addPosition($context);
 
-        $width = $this->width ?? ($context->getWidth() - $this->getAbsoluteX($context->getDPI()));
+        $width = $this->width ?? ($context->getWidth() - $this->getAbsoluteX($context));
         $width = $context->toDots(Context::X, $width, true);
 
         $context->with($this->config ?? $context->getDefaultTextConfig())

@@ -11,7 +11,7 @@ use ZplGenerator\Printer\Printer;
 class LabelTest extends TestCase {
 
     public function testBasicLabel() {
-        $expected = "^XA^PON^MMT,N^PW819.9921^LL819.9921^FO310.0945,119.8819^BQN,2,10,H^FDMM,A,https://wiilog.fr/^FS^FO0,39.9606^A0N,55.9449,55.9449^FB820,1,0,C,0^FH_^FDWiilog\&^FS^XZ";
+        $expected = "^XA^PON^MMT,N^PW841.3119^LL841.3119^CI28^FO307.497,122.9988^BQN,2,10,H^FDMM,A,https://wiilog.fr/^FS^FO0,40.9996^A0N,57.3994,57.3994^FB841,1,0,C,0^FH_^FDWiilog\&^FS^XZ";
 
         $logo = Text::create(0, 5)
             ->setWidth(102.6)

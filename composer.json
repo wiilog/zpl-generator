@@ -9,8 +9,7 @@
     },
     "autoload": {
         "psr-4": {
-            "ZplGenerator\\": "src/",
-            "ZplGenerator\\Test\\": "tests/"
+            "ZplGenerator\\": "src/"
         }
     }
 }

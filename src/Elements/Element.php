@@ -35,26 +35,22 @@ abstract class Element implements ToZPL {
         return $this;
     }
 
-    public function getAbsoluteX(int $dpi): ?float {
+    public function getAbsoluteX(Context $context): ?float {
         //no parent means it's the root container
         if(!$this->root) {
             return 0;
         }
 
         if($this->alignment === Align::LEFT) {
-            return$this->getX();
+            return $this->getX();
         } else if($this->alignment === Align::RIGHT) {
-            return $this->root->getWidth($dpi) - $this->getX() - $this->getWidth($dpi);
+            return 100 - $this->getX() - $this->getWidth($context);
         } else {
-            return $this->root->getWidth($dpi) / 2 - $this->getX() - $this->getWidth($dpi) / 2;
+            return 100 / 2 - $this->getX() - $this->getWidth($context) / 2;
         }
     }
 
-    public function getAbsoluteY(int $dpi): ?float {
-        //no parent means it's the root container
-        if(!$this->root) {
-            return 0;
-        }
+    public function getAbsoluteY(Context $context): ?float {
         return $this->getY();
     }
 
@@ -72,7 +68,7 @@ abstract class Element implements ToZPL {
         return $this;
     }
 
-    public function getWidth(int $dpi): ?float {
+    public function getWidth(Context $context): ?float {
         return $this->width;
     }
 
@@ -96,8 +92,8 @@ abstract class Element implements ToZPL {
         }
 
         $context->fo(
-            $context->toDots(Context::X, $this->getAbsoluteX($context->getDPI())),
-            $context->toDots(Context::Y, $this->getAbsoluteY($context->getDPI()))
+            $context->toDots(Context::X, $this->getAbsoluteX($context)),
+            $context->toDots(Context::Y, $this->getAbsoluteY($context))
         );
     }
 
