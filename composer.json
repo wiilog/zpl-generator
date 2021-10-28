@@ -2,6 +2,7 @@
     "name": "wiilog/zpl-generator",
     "description": "Generates ZPL code",
     "require": {
+        "ext-gd": "*",
         "robgridley/zebra": "^2.0"
     },
     "require-dev": {
