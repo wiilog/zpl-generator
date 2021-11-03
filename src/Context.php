@@ -47,6 +47,8 @@ class Context {
     }
 
     public function toDots(int $direction, float $value, bool $round = false) {
+        //TODO: allow changing unit to mm
+
         //unit in mm
         //return round($value * 1 / 25.4 * $this->getDPI(), $round ? 0 : 4);
 

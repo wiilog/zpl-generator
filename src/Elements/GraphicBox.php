@@ -39,7 +39,13 @@ class GraphicBox extends Element {
     public function toZPL(Context $context) {
         $this->addPosition($context);
 
-        $context->gb($this->width, $this->height, $this->borderWidth ?: 1, $this->borderWidth != 0 ? "B" : "W", $this->rounding);
+        $context->gb(
+            $context->toDots(Context::X, $this->width),
+            $context->toDots(Context::X, $this->height),
+            $this->borderWidth ?: 1,
+            $this->borderWidth != 0 ? "B" : "W",
+            $this->rounding
+        );
     }
 
 }
