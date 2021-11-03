@@ -36,14 +36,7 @@ class GdDecoder implements Decoder {
             throw new InvalidArgumentException("Invalid resource");
         }
 
-        if(!imageistruecolor($image)) {
-            imagepalettetotruecolor($image);
-        }
-
-        imagefilter($image, IMG_FILTER_GRAYSCALE);
-
-        $this->original = $image;
-        $this->output = $image;
+        $this->load($image);
     }
 
     public function __destruct() {
@@ -87,6 +80,25 @@ class GdDecoder implements Decoder {
 
     public function getBitAt(int $x, int $y): int {
         return (imagecolorat($this->output, $x, $y) & 0xFF) < 127 ? 1 : 0;
+    }
+
+    private function load($image) {
+        if(!imageistruecolor($image)) {
+            imagepalettetotruecolor($image);
+        }
+
+        $width = imagesx($image);
+        $height = imagesy($image);
+
+        $background = imagecreatetruecolor($width, $height);
+        $color = imagecolorallocate($background, 255, 255, 255);
+        imagefilledrectangle($background, 0, 0, $width, $height, $color);
+
+        imagecopy($background, $image, 0, 0, 0, 0, $width, $height);
+        imagefilter($image, IMG_FILTER_GRAYSCALE);
+
+        $this->original = $image;
+        $this->output = $image;
     }
 
 }
