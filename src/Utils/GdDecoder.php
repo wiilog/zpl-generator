@@ -82,20 +82,22 @@ class GdDecoder implements Decoder {
         return (imagecolorat($this->output, $x, $y) & 0xFF) < 127 ? 1 : 0;
     }
 
-    private function load($image) {
-        if(!imageistruecolor($image)) {
-            imagepalettetotruecolor($image);
+    private function load($foreground) {
+        if(!imageistruecolor($foreground)) {
+            imagepalettetotruecolor($foreground);
         }
 
-        $width = imagesx($image);
-        $height = imagesy($image);
+        $width = imagesx($foreground);
+        $height = imagesy($foreground);
 
-        $background = imagecreatetruecolor($width, $height);
-        $color = imagecolorallocate($background, 255, 255, 255);
-        imagefilledrectangle($background, 0, 0, $width, $height, $color);
+        //in greyscale
+        imagefilter($foreground, IMG_FILTER_GRAYSCALE);
 
-        imagecopy($background, $image, 0, 0, 0, 0, $width, $height);
-        imagefilter($image, IMG_FILTER_GRAYSCALE);
+        //remove transparency
+        $image = imagecreatetruecolor($width, $height);
+        $color = imagecolorallocate($image, 255, 255, 255);
+        imagefilledrectangle($image, 0, 0, $width, $height, $color);
+        imagecopy($image, $foreground, 0, 0, 0, 0, $width, $height);
 
         $this->original = $image;
         $this->output = $image;
