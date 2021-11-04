@@ -8,30 +8,29 @@ class Client {
 
     protected $socket;
 
-    public function __construct(string $host, int $port = 9100) {
-        $this->connect($host, $port);
+    public function __construct(string $host, int $port, int $timeout) {
+        $this->connect($host, $port, $timeout);
     }
 
     public function __destruct() {
         $this->disconnect();
     }
 
-    public static function printer(string $host, int $port = 9100): self {
-        return new static($host, $port);
+    public static function printer(string $host, int $port, int $timeout): self {
+        return new static($host, $port, $timeout);
     }
 
-    protected function connect(string $host, int $port): void {
+    protected function connect(string $host, int $port, int $timeout): void {
         $this->socket = @socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
 
-        if(!$this->socket || !$this->connectWithTimeout($this->socket, $host, $port)) {
+        if(!$this->socket || !$this->connectWithTimeout($this->socket, $host, $port, $timeout)) {
             $error = $this->getLastError();
             throw new CommunicationException($error["message"], $error["code"]);
         }
     }
 
-    private function connectWithTimeout($socket, string $host, int $port): bool {
+    private function connectWithTimeout($socket, string $host, int $port, int $timeout): bool {
         $connexionsPerSecond = 100;
-        $timeout = 10;
 
         socket_set_nonblock($socket);
 

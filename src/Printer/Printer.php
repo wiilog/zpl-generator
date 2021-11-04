@@ -24,6 +24,8 @@ class Printer {
 
     private int $dpi;
 
+    private int $timeout = 30;
+
     private PrintMode $mode;
 
     public function __construct(string $address, int $port = 9100, bool $lazy = false) {
@@ -31,7 +33,7 @@ class Printer {
         $this->port = $port;
         $this->mode = new PrintMode(PrintMode::TEAR_OFF);
         if(!$lazy) {
-            $this->client = new Client($address, $port);
+            $this->client = new Client($address, $port, 10);
         }
     }
 
@@ -62,6 +64,11 @@ class Printer {
         return $this;
     }
 
+    public function setTimeout(int $timeout): Printer {
+        $this->timeout = $timeout;
+        return $this;
+    }
+
     public function getMode(): PrintMode {
         return $this->mode;
     }
@@ -77,7 +84,7 @@ class Printer {
 
     public function connect() {
         if(!$this->client) {
-            $this->client = new Client($this->address, $this->port);
+            $this->client = new Client($this->address, $this->port, $this->timeout);
         }
     }
 
