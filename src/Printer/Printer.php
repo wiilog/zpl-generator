@@ -28,17 +28,17 @@ class Printer {
 
     private PrintMode $mode;
 
-    public function __construct(string $address, int $port = 9100, bool $lazy = false) {
+    public function __construct(string $address, int $port = 9100, int $timeout = 10, bool $lazy = false) {
         $this->address = $address;
         $this->port = $port;
         $this->mode = new PrintMode(PrintMode::TEAR_OFF);
         if(!$lazy) {
-            $this->client = new Client($address, $port, 10);
+            $this->client = new Client($address, $port, $timeout);
         }
     }
 
-    public static function create(string $host, int $port = 9100, bool $lazy = false): self {
-        return new static($host, $port, $lazy);
+    public static function create(string $host, int $port = 9100, int $timeout = 10, bool $lazy = false): self {
+        return new static($host, $port, $timeout, $lazy);
     }
 
     public function getWidth(): float {

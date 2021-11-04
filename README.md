@@ -21,7 +21,7 @@ $qr = QrCode::create(0, 15)
     ->setAlignment(Align::CENTER)
     ->setErrorCorrection(QrCode::EC_HIGHEST);
 
-$printer = Printer::create("127.0.0.1", 9100, true)
+$printer = Printer::create("127.0.0.1", 9100, 10, true)
     ->setDimension(102.6, 102.6)
     ->setDPI(Printer::DPI_203);
 

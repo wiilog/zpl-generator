@@ -11,7 +11,7 @@ use ZplGenerator\ToZPL;
 class TestUtils {
 
     public static function createPrinter(): Printer {
-        return Printer::create("127.0.0.1", 9100, true)
+        return Printer::create("127.0.0.1", 9100, 10, true)
             ->setDPI(Printer::DPI_203)
             ->setDimension(102.6, 102.6);
     }
