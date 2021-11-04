@@ -3,7 +3,6 @@
 namespace ZplGenerator\Printer;
 
 use RuntimeException;
-use Zebra\Client;
 use ZplGenerator\Label;
 
 class Printer {

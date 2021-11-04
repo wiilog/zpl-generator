@@ -3,6 +3,7 @@
     "description": "Generates ZPL code",
     "require": {
         "ext-gd": "*",
+        "ext-sockets": "*",
         "robgridley/zebra": "^2.0"
     },
     "require-dev": {
