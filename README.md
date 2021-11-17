@@ -1,5 +1,5 @@
 # ZPL Generator
-Wrapper classes to generate ZPL
+Wrapper classes to generate ZPL, inspired from [teddy-dubal/weez-zpl](https://github.com/teddy-dubal/weez-zpl)
 
 ## Example
 ```php
