@@ -1,5 +1,5 @@
 # ZPL Generator
-Wrapper classes to generate ZPL, inspired from [teddy-dubal/weez-zpl](https://github.com/teddy-dubal/weez-zpl)
+Wrapper classes to generate ZPL and print it either to a network printer or a Zebra Cloud printer, based on [teddy-dubal/weez-zpl](https://github.com/teddy-dubal/weez-zpl)
 
 ## Example
 ```php

@@ -11,6 +11,7 @@ jobs:
         with:
           php_version: 8.0
           version: 2
+          extensions: gd, sockets
 
       - name: Run tests
         run: vendor/bin/phpunit tests
