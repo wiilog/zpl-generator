@@ -6,6 +6,8 @@ use CURLFile;
 
 class CloudClient implements Client {
 
+    public const SUCCESS = "SUCCESS";
+
     private string $key;
 
     private string $tenant;
@@ -49,11 +51,21 @@ class CloudClient implements Client {
             ],
         ));
 
-        $response = curl_exec($curl);
+        $body = json_decode(curl_exec($curl), true);
         $status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
         if($status !== 200) {
             throw new CloudClientException($status);
+        }
+
+        if($body["status"] !== self::SUCCESS) {
+            throw new CloudClientException(CloudClientException::PRINT_FAILURE);
+        }
+
+        foreach($body["responses"] as $response) {
+            if($response["status"] !== self::SUCCESS) {
+                throw new CloudClientException(CloudClientException::PRINT_FAILURE);
+            }
         }
 
         curl_close($curl);
