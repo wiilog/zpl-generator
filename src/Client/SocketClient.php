@@ -1,12 +1,13 @@
 <?php
 
-namespace ZplGenerator\Printer;
+namespace ZplGenerator\Client;
 
+use Socket;
 use Zebra\CommunicationException;
 
-class Client {
+class SocketClient implements Client {
 
-    protected $socket;
+    protected Socket|false $socket;
 
     public function __construct(string $host, int $port, int $timeout) {
         $this->connect($host, $port, $timeout);
@@ -16,8 +17,8 @@ class Client {
         $this->disconnect();
     }
 
-    public static function printer(string $host, int $port, int $timeout): self {
-        return new static($host, $port, $timeout);
+    public static function create(string $host, int $port, int $timeout): self {
+        return new SocketClient($host, $port, $timeout);
     }
 
     protected function connect(string $host, int $port, int $timeout): void {

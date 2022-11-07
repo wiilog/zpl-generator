@@ -3,6 +3,7 @@
 namespace ZplGenerator;
 
 use RuntimeException;
+use ZplGenerator\Client\Client;
 use ZplGenerator\Elements\Common\Orientation;
 use ZplGenerator\Elements\Container;
 use ZplGenerator\Elements\Element;
@@ -38,14 +39,6 @@ class Label {
             ->with($this->elements)
             ->xz()
             ->getOutput();
-    }
-
-    public function print() {
-        if(!$this->printer) {
-            throw new RuntimeException("Label is not linked to a printer");
-        }
-
-        $this->printer->print($this);
     }
 
 }

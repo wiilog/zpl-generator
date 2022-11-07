@@ -3,6 +3,8 @@
 namespace ZplGenerator\Printer;
 
 use RuntimeException;
+use ZplGenerator\Client\Client;
+use ZplGenerator\Client\SocketClient;
 use ZplGenerator\Label;
 
 class Printer {
@@ -11,12 +13,6 @@ class Printer {
     public const DPI_203 = 203;
     public const DPI_300 = 300;
     public const DPI_600 = 600;
-
-    private ?Client $client = null;
-
-    private string $address;
-
-    private int $port;
 
     private float $width;
 
@@ -28,17 +24,12 @@ class Printer {
 
     private PrintMode $mode;
 
-    public function __construct(string $address, int $port = 9100, int $timeout = 10, bool $lazy = false) {
-        $this->address = $address;
-        $this->port = $port;
+    public function __construct() {
         $this->mode = new PrintMode(PrintMode::TEAR_OFF);
-        if(!$lazy) {
-            $this->client = new Client($address, $port, $timeout);
-        }
     }
 
-    public static function create(string $host, int $port = 9100, int $timeout = 10, bool $lazy = false): self {
-        return new static($host, $port, $timeout, $lazy);
+    public static function create(): self {
+        return new static();
     }
 
     public function getWidth(): float {
@@ -82,13 +73,7 @@ class Printer {
         return new Label($this);
     }
 
-    public function connect() {
-        if(!$this->client) {
-            $this->client = new Client($this->address, $this->port, $this->timeout);
-        }
-    }
-
-    public function print(...$items) {
+    public function print(Client $client, Label|string ...$items): void {
         $zpl = "";
         foreach($items as $item) {
             if($item instanceof Label) {
@@ -100,8 +85,7 @@ class Printer {
             }
         }
 
-        $this->connect();
-        $this->client->send($zpl);
+        $client->send($zpl);
     }
 
 }
