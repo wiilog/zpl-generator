@@ -3,6 +3,7 @@
 namespace ZplGenerator\Utils;
 
 
+use GdImage;
 use InvalidArgumentException;
 use Zebra\Contracts\Zpl\Decoder;
 use ZplGenerator\Context;
@@ -45,6 +46,10 @@ class GdDecoder implements Decoder {
     }
 
     public function isGdResource($image): bool {
+        if($image instanceof GdImage) {
+            return true;
+        }
+
         if(is_resource($image)) {
             return get_resource_type($image) === "gd";
         }
