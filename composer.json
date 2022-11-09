@@ -3,7 +3,6 @@
     "description": "Generates ZPL code",
     "require": {
         "ext-gd": "*",
-        "ext-sockets": "*",
         "ext-curl": "*",
         "php": "^8.0",
         "robgridley/zebra": "^2.0"
