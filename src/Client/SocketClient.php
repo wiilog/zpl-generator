@@ -7,10 +7,7 @@ use Zebra\CommunicationException;
 
 class SocketClient implements Client {
 
-    protected $socket;
-
-    private ?string $error_code = null;
-    private ?string $error_message = null;
+    protected Socket|false $socket;
 
     public function __construct(string $host, int $port, int $timeout) {
         $this->connect($host, $port, $timeout);
@@ -25,27 +22,47 @@ class SocketClient implements Client {
     }
 
     protected function connect(string $host, int $port, int $timeout): void {
-        $this->socket = fsockopen($host, $port, $this->error_code, $this->error_message, $timeout);
+        $this->socket = @socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
 
-        if(!$this->socket) {
+        if(!$this->socket || !$this->connectWithTimeout($this->socket, $host, $port, $timeout)) {
             $error = $this->getLastError();
             throw new CommunicationException($error["message"], $error["code"]);
         }
     }
 
+    private function connectWithTimeout($socket, string $host, int $port, int $timeout): bool {
+        $connexionsPerSecond = 100;
+
+        socket_set_nonblock($socket);
+
+        for($i=0; $i<($timeout * $connexionsPerSecond); $i++) {
+            @socket_connect($socket, $host, $port);
+            if(socket_last_error($socket) == SOCKET_EISCONN) {
+                break;
+            }
+
+            usleep(1000000 / $connexionsPerSecond);
+        }
+
+        socket_set_block($socket);
+
+        return socket_last_error($socket) == SOCKET_EISCONN;
+    }
+
     protected function disconnect(): void {
-        pclose($this->socket);
+        @socket_close($this->socket);
     }
 
     public function send(string $zpl): void {
-        if(false === @fwrite($this->socket, $zpl)) {
-            throw new CommunicationException($this->error_message, $this->error_code);
+        if(false === @socket_write($this->socket, $zpl)) {
+            $error = $this->getLastError();
+            throw new CommunicationException($error['message'], $error['code']);
         }
     }
 
     protected function getLastError(): array {
-        $code = $this->error_code;
-        $message = $this->error_message;
+        $code = socket_last_error($this->socket);
+        $message = socket_strerror($code);
 
         return compact('code', 'message');
     }
